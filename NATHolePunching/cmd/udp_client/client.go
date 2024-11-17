@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"math/rand"
 	"net"
 	"time"
 )
@@ -63,15 +62,15 @@ func runUDPClientNAT(address string) {
 		return
 	}
 	fmt.Printf("Resolved peer address: %v\n", peerAddr)
-	clientPort := 55001 + rand.Intn(10000)
 
+	// Создаем локальный сокет (без явного указания порта)
 	localConn, err := net.ListenUDP("udp", nil)
 	if err != nil {
 		fmt.Printf("Error creating local UDP socket: %v\n", err)
 		return
 	}
 	defer localConn.Close()
-	fmt.Printf("Local UDP socket created on port %d.\n", clientPort)
+	fmt.Printf("Local UDP socket created on: %v\n", localConn.LocalAddr())
 
 	done := make(chan struct{})
 	go func() {
