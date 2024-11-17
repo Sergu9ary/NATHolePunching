@@ -9,12 +9,11 @@ import (
 
 func main() {
 	mode := flag.String("mode", "rendezvous", "Mode: rendezvous, udp-client-nat")
-	address := flag.String("address", "localhost:8080", "Server address (e.g., localhost:8080)")
 	flag.Parse()
 
 	switch *mode {
 	case "rendezvous":
-		runRendezvousServer(*address)
+		runRendezvousServer()
 	default:
 		fmt.Println("Unknown mode:", *mode)
 	}
@@ -25,8 +24,8 @@ var (
 	mu         sync.Mutex
 )
 
-func runRendezvousServer(address string) {
-	addr, err := net.ResolveUDPAddr("udp", address)
+func runRendezvousServer() {
+	addr, err := net.ResolveUDPAddr("udp", ":3478")
 	if err != nil {
 		fmt.Println("Error resolving server address:", err)
 		return
@@ -38,7 +37,7 @@ func runRendezvousServer(address string) {
 		return
 	}
 	defer conn.Close()
-	fmt.Println("Rendezvous server started at", address)
+	fmt.Println("Rendezvous server started at")
 
 	buf := make([]byte, 1024)
 	for {
